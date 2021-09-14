@@ -1,4 +1,7 @@
 #include "PlayMode.hpp"
+#include "data_path.hpp"
+#include "read_write_chunk.hpp"
+#include "Load.hpp"
 
 //for the GL_ERRORS() macro:
 #include "gl_errors.hpp"
@@ -7,6 +10,43 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <random>
+#include <fstream>
+#include <iostream>
+
+const std::string asset_path = data_path("..\\assets.bin");
+
+std::vector< glm::u8vec4 > player_palette;
+std::vector< uint8_t > player1, player2;
+
+struct SpriteReader {
+	std::filebuf fb;
+
+	SpriteReader() {
+		try {
+			if (fb.open(asset_path, std::ios::in | std::ios::binary)) {
+				std::istream from(&fb);
+
+				std::cout << "Reading ppal" << std::endl;
+				read_chunk(from, "ppal", &player_palette);
+				std::cout << "Read ppal" << std::endl;
+				read_chunk(from, "pla1", &player1);
+				read_chunk(from, "pla2", &player2);
+			}
+		} catch (...) {
+			std::cerr << "Unhandled exception (unknown type)." << std::endl;
+			throw;
+		}
+	};
+
+	~SpriteReader() {
+		fb.close();
+	};
+};
+
+Load< SpriteReader > atlas(LoadTagDefault, []() {
+	SpriteReader* ret = new SpriteReader();
+	return ret;
+	});
 
 PlayMode::PlayMode() {
 	//TODO:
@@ -17,7 +57,20 @@ PlayMode::PlayMode() {
 	//   and check that script into your repository.
 
 	//Also, *don't* use these tiles in your game:
+	
+	ppu.background_color = glm::u8vec4(255, 255, 255, 255);
+	ppu.palette_table[0][0] = player_palette[0];
+	ppu.palette_table[0][1] = player_palette[1];
+	ppu.palette_table[0][2] = player_palette[2];
+	ppu.palette_table[0][3] = player_palette[3];
 
+	// tile_table[0] is player sprite
+	for (int i = 0; i < 8; i++) {
+		ppu.tile_table[32].bit0[i] = player1[i];
+		ppu.tile_table[32].bit1[i] = player2[i];
+	}
+
+	/*
 	{ //use tiles 0-16 as some weird dot pattern thing:
 		std::array< uint8_t, 8*8 > distance;
 		for (uint32_t y = 0; y < 8; ++y) {
@@ -100,7 +153,7 @@ PlayMode::PlayMode() {
 		glm::u8vec4(0x88, 0x88, 0xff, 0xff),
 		glm::u8vec4(0x00, 0x00, 0x00, 0xff),
 		glm::u8vec4(0x00, 0x00, 0x00, 0x00),
-	};
+	};*/
 
 }
 
@@ -196,6 +249,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 	ppu.sprites[0].index = 32;
 	ppu.sprites[0].attributes = 7;
 
+	/*
 	//some other misc sprites:
 	for (uint32_t i = 1; i < 63; ++i) {
 		float amt = (i + 2.0f * background_fade) / 62.0f;
@@ -205,7 +259,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		ppu.sprites[i].attributes = 6;
 		if (i % 2) ppu.sprites[i].attributes |= 0x80; //'behind' bit
 	}
-
+	*/
 	//--- actually draw ---
 	ppu.draw(drawable_size);
 }

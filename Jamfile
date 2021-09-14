@@ -112,6 +112,7 @@ if $(OS) = NT { #Windows
 #---- build ----
 #This is the part of the file that tells Jam how to build your project.
 
+
 #Store the names of all the .cpp files to build into a variable:
 GAME_NAMES =
 	PlayMode
@@ -130,3 +131,9 @@ Objects $(GAME_NAMES:S=.cpp) ;
 
 LOCATE_TARGET = dist ; #put main in 'dist' directory
 MainFromObjects game : $(GAME_NAMES:S=$(SUFOBJ)) ;
+
+LOCATE_TARGET = objs ;
+Objects export_assets.cpp ;
+
+LOCATE_TARGET = sprites ;
+MainFromObjects build_assets : export_assets$(SUFOBJ) load_save_png$(SUFOBJ) ;
