@@ -20,6 +20,7 @@ Sources:
 The following two sources served as inspiration for the way in which we created palettes and tiles from the PNG files.
 
 https://github.com/kjannakh/15-466-f20-base1/blob/master/process_assets.cpp
+
 https://github.com/Chipxiang/Jump-Guy/blob/master/asset_converter.cpp
 
 This game was built with [NEST](NEST.md).
