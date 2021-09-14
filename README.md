@@ -1,8 +1,8 @@
-# (TODO: your game's title)
+# Maze Runner
 
-Author: (TODO: your name)
+Authors: Kishan Patel and Tejas Srivatsav
 
-Design: (TODO: In two sentences or fewer, describe what is new and interesting about your game.)
+Design: The objective of the game is for the player to reach the other end of the maze. Unfortunately the maze is dark, so you will need to strategically use the flashlights along the way to temporarily illuminate the entire map.
 
 Screen Shot:
 
@@ -10,13 +10,17 @@ Screen Shot:
 
 How Your Asset Pipeline Works:
 
-(TODO: describe the steps in your asset pipeline, from source files to tiles/backgrounds/whatever you upload to the PPU466.)
+All of the assets (background, walls, player, and flashlights) were drawn using GIMP. Then we exported and saved these files in PNG format. In export_assets.cpp, these PNG files are then used to create palettes and tiles, which are then saved in binary format. The palettes are created based on the four colors in each sprite, and then these palettes are used to create tiles. Finally, the information in the binary file is used to fill in the palette table and tile table.
 
 How To Play:
 
-(TODO: describe the controls and (if needed) goals/strategy.)
+Use the arrow keys to move the player. If you move over the flashlights, you will be able to view the entire map.
 
-Sources: (TODO: list a source URL for any assets you did not create yourself. Make sure you have a license for the asset.)
+Sources:
+The following two sources served as inspiration for the way in which we created palettes and tiles from the PNG files.
+
+https://github.com/kjannakh/15-466-f20-base1/blob/master/process_assets.cpp
+https://github.com/Chipxiang/Jump-Guy/blob/master/asset_converter.cpp
 
 This game was built with [NEST](NEST.md).
 
