@@ -57,6 +57,7 @@ void write_tile(const char* tile0_name, const char* tile1_name, std::vector< glm
 
 int main(int argc, char** argv) {
 	try {
+		// inspiration taken from http://www.cplusplus.com/reference/ostream/ostream/ostream/
 		std::filebuf fb;
 		fb.open("assets.bin", std::ios::out | std::ios::binary);
 		std::ostream os(&fb);
@@ -72,6 +73,7 @@ int main(int argc, char** argv) {
 		fb.close();
 
 		return 0;
+	// try-catch modified from Jim McCann's game 1 base code for robust error-logging
 	} catch (std::exception const& e) {
 		std::cerr << "Unhandled exception:\n" << e.what() << std::endl;
 		return 1;

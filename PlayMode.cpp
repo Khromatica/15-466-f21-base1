@@ -23,15 +23,17 @@ struct SpriteReader {
 
 	SpriteReader() {
 		try {
-			if (fb.open(asset_path, std::ios::in | std::ios::binary)) {
-				std::istream from(&fb);
+			// inspiration from http://www.cplusplus.com/reference/istream/istream/istream/
+			fb.open(asset_path, std::ios::in | std::ios::binary)) 
+			std::istream from(&fb);
 
-				std::cout << "Reading ppal" << std::endl;
-				read_chunk(from, "ppal", &player_palette);
-				std::cout << "Read ppal" << std::endl;
-				read_chunk(from, "pla1", &player1);
-				read_chunk(from, "pla2", &player2);
-			}
+			std::cout << "Reading ppal" << std::endl;
+			read_chunk(from, "ppal", &player_palette);
+			std::cout << "Read ppal" << std::endl;
+			read_chunk(from, "pla1", &player1);
+			read_chunk(from, "pla2", &player2);
+			
+		// try-catch modified from Jim McCann's game 1 base code for robust error-logging
 		} catch (...) {
 			std::cerr << "Unhandled exception (unknown type)." << std::endl;
 			throw;
