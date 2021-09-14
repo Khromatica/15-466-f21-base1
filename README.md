@@ -17,6 +17,7 @@ How To Play:
 Use the arrow keys to move the player. If you move over the flashlights, you will be able to view the entire map.
 
 Sources:
+
 The following two sources served as inspiration for the way in which we created palettes and tiles from the PNG files.
 
 https://github.com/kjannakh/15-466-f20-base1/blob/master/process_assets.cpp
