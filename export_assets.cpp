@@ -30,6 +30,27 @@ std::vector< glm::u8vec4 > write_palette(const char* palette_name, std::ostream*
 	write_chunk< glm::u8vec4 >(palette_name, pal, to)
 }
 
+// write_tile inspiration from https://github.com/Chipxiang/Jump-Guy/blob/master/asset_converter.cpp
+PPU466::Tile write_tile(const char* tile0_name, const char* tile1_name, const PPU466::Palette palette, std::ostream* to, const std::vector<glm::u8vec4>& pixel_data) {
+	assert(pixel_data.size() == TILE_WIDTH * TILE_HEIGHT);
+	PPU466::Tile tile{};
+
+	for (int i = 0; i < TILE_HEIGHT; i++) {
+		for (int j = 0; j < TILE_WIDTH; j++) {
+			// pixel at (j, i)
+			glm::u8vec4 color = pixel_data[i * TILE_WIDTH + j];
+			auto idx = (size_t)(std::find(palette.begin(), palette.end(), color) - palette.begin());
+
+			assert(idx < palette.size());
+			tile.bit0[i] |= ((idx & 1) << j);
+			tile.bit1[i] |= (((idx & 2) >> 1) << j);
+		}
+	}
+	
+	write_chunk< glm::uint8_t >(tile0_name, tile.bit0, to);
+	write_chunk< glm::uint8_t >(tile1_name, tile.bit1, to);
+}
+
 int main() {
 	try {
 		std::filebuf fb;
